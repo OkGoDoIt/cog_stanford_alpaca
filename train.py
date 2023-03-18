@@ -36,16 +36,18 @@ def _make_r_io_base(f, mode: str):
         f = open(f, mode=mode)
     return f
 
-def getAllTraningFiles(path):
+def getAllTraningFiles(path) -> Sequence[str]:
     """Recursively get all .txt files in the specified directory."""
+    print("getAllTraningFiles")
     for root, dirs, files in os.walk(path):
         for file in files:
             if file.endswith(".txt"):
+                print(os.path.join(root, file))
                 yield tload(os.path.join(root, file))
 
 
-def tload(f, mode="r"):
-    """Load a .txt file into a string, return the contents as a list."""
+def tload(f, mode="r") -> str:
+    """Load a .txt file into a string, return the contents."""
     print("Loading ", f)
     f = _make_r_io_base(f, mode)
     
