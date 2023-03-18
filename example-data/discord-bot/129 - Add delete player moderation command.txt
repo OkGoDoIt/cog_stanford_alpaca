@@ -1,0 +1,432 @@
+https://api.github.com/repos/wise-old-man/discord-bot
+discord-bot
+A discord bot for the Wise Old Man project.
+
+Here is a list of all files in the git repo:
+.dockerignore
+.eslintignore
+.eslintrc
+.gitattributes
+.github/workflows/deploy.yml
+.prettierrc
+.sequelizerc
+Dockerfile
+LICENSE
+README.md
+docker-compose.yml
+package.json
+src/api/handler.ts
+src/api/index.ts
+src/api/modules/competitions.ts
+src/api/modules/groups.ts
+src/api/modules/names.ts
+src/api/modules/players.ts
+src/api/modules/snapshots.ts
+src/api/types.ts
+src/api/utils.ts
+src/bot.ts
+src/commands/CommandError.ts
+src/commands/CustomCommands.ts
+src/commands/instances/config/ConfigChannelPreference.ts
+src/commands/instances/config/ConfigDefaultChannel.ts
+src/commands/instances/config/ConfigGroup.ts
+src/commands/instances/config/ConfigPrefix.ts
+src/commands/instances/general/Help.ts
+src/commands/instances/group/GroupCompetition.ts
+src/commands/instances/group/GroupCompetitions.ts
+src/commands/instances/group/GroupDetails.ts
+src/commands/instances/group/GroupGained.ts
+src/commands/instances/group/GroupHiscores.ts
+src/commands/instances/group/GroupMembers.ts
+src/commands/instances/group/GroupRecords.ts
+src/commands/instances/index.ts
+src/commands/instances/moderation/ApproveNameChange.ts
+src/commands/instances/moderation/DenyNameChange.ts
+src/commands/instances/moderation/ResetCompetitionCode.ts
+src/commands/instances/moderation/ResetGroupCode.ts
+src/commands/instances/moderation/ReviewNameChange.ts
+src/commands/instances/moderation/VerifyGroup.ts
+src/commands/instances/player/PlayerAchievements.ts
+src/commands/instances/player/PlayerActivities.ts
+src/commands/instances/player/PlayerBosses.ts
+src/commands/instances/player/PlayerEfficiency.ts
+src/commands/instances/player/PlayerGained.ts
+src/commands/instances/player/PlayerSetFlag.ts
+src/commands/instances/player/PlayerSetUsername.ts
+src/commands/instances/player/PlayerStats.ts
+src/commands/instances/player/UpdatePlayer.ts
+src/commands/parser.ts
+src/commands/router.ts
+src/config.ts
+src/database/config.ts
+src/database/index.ts
+src/database/migrations/20200616003302-create-guild-configs-table.ts
+src/database/migrations/20200709182151-add-player-alias.ts
+src/database/migrations/20210306142806-create-channel-preferences-table.ts
+src/database/models/Alias.ts
+src/database/models/ChannelPreference.ts
+src/database/models/Server.ts
+src/database/services/alias.ts
+src/database/services/channelPreferences.ts
+src/database/services/server.ts
+src/events/instances/CompetitionCreated.ts
+src/events/instances/CompetitionEnded.ts
+src/events/instances/CompetitionEnding.ts
+src/events/instances/CompetitionStarted.ts
+src/events/instances/CompetitionStarting.ts
+src/events/instances/MemberAchievements.ts
+src/events/instances/MemberHardcoreDied.ts
+src/events/instances/MemberNameChanged.ts
+src/events/instances/MembersJoined.ts
+src/events/instances/MembersLeft.ts
+src/events/instances/index.ts
+src/events/router.ts
+src/index.ts
+src/types.ts
+src/utils/broadcast.ts
+src/utils/dates.ts
+src/utils/discord.ts
+src/utils/flags.ts
+src/utils/index.ts
+src/utils/levels.ts
+src/utils/metrics.ts
+src/utils/rendering.ts
+src/utils/strings.ts
+tsconfig.json
+wait-for-it.sh
+
+-----
+Here is the project's README.md:
+<div align = "center">
+
+![Wise Old Man Discord Bot](https://user-images.githubusercontent.com/3278148/86964409-ec5f2880-c15d-11ea-84bf-8b484d60afd2.png)
+
+🔗 [www.bot.wiseoldman.net](https://bot.wiseoldman.net/)
+
+Track your Old School Runescape clan’s progress from your own Discord server.
+
+![MIT license](https://img.shields.io/github/license/wise-old-man/wise-old-man) ![Bot repo](https://img.shields.io/badge/wise%20old%20man-discord%20bot-blue)
+
+The Wise Old Man is an app that tracks your Old School Runescape player progress. Built on top of the OSRS hiscores, it allows you to keep track of your gains, participate in group competitions, collect achievements and much more.
+
+This repository is an extention of the core project, a Discord Bot to server as a secondary user interface.
+
+[Website](https://bot.wiseoldman.net/) |
+[Discord](https://discord.gg/Ky5vNt2) |
+[Patreon](https://www.patreon.com/wiseoldman)
+
+</div>
+
+<br />
+
+## 👪 Related projects
+
+- [Core Repository (API/Webapp)](https://github.com/wise-old-man/wise-old-man)
+- [Discord Bot Landing Page](https://github.com/wise-old-man/bot.wiseoldman.net)
+
+<br />
+
+## 📚 Technologies
+
+This project is built using Discord.js, Sequelize and Express.
+
+<br />
+
+## 💬 Suggestions and bugs
+
+Have a suggestion or a bug to report? [Click here to create a issue](https://github.com/wise-old-man/discord-bot/issues)
+
+Have something else you'd like to discuss? [Join us on discord](https://discord.gg/Ky5vNt2)
+
+<br />
+
+
+-----
+Now we want to add a pull request "Add delete player moderation command".  Here is the description of what this PR does:
+Adds new bot moderation command that allows mods and admins to delete players (and all their data)
+
+-----
+What files need to be modified or added to implement this change?
+modified src/api/modules/players.ts
+modified src/commands/instances/index.ts
+added src/commands/instances/moderation/DeletePlayer.ts
+
+-----
+Here are the current contents of src/api/modules/players.ts:
+import api from '../handler';
+import { Player, PlayerAchievement, PlayerGains, PlayerRecord } from '../types';
+import { convertDates } from '../utils';
+
+/*
+ * Fetch the player details from the API.
+ */
+async function fetchPlayer(username: string): Promise<Player> {
+  const URL = `/players/username/${username}`;
+  const { data } = await api.get(URL);
+
+  // Convert date strings into date instances
+  convertDates(data, ['registeredAt', 'updatedAt', 'lastImportedAt']);
+  convertDates(data.latestSnapshot, ['createdAt', 'importedAt']);
+
+  return data;
+}
+
+/**
+ * Send an API request attempting to update a given username.
+ */
+async function updatePlayer(username: string): Promise<Player> {
+  const URL = `/players/track`;
+  const { data } = await api.post(URL, { username });
+
+  // Convert date strings into date instances
+  convertDates(data, ['registeredAt', 'updatedAt', 'lastImportedAt']);
+  convertDates(data.latestSnapshot, ['createdAt', 'importedAt']);
+
+  return data;
+}
+
+/**
+ * Send an API request attempting to update a player's country
+ */
+async function updateCountry(username: string, country: string): Promise<{ message: string }> {
+  const URL = `/players/username/${username}/country`;
+  const adminPassword = process.env.ADMIN_PASSWORD;
+
+  const { data } = await api.put(URL, { country, adminPassword });
+
+  return data;
+}
+
+/**
+ * Fetch the player's gains from the API.
+ */
+async function fetchPlayerGains(username: string, period: string): Promise<PlayerGains> {
+  const URL = `/players/username/${username}/gained`;
+  const { data } = await api.get(URL, { params: { period } });
+
+  // Convert date strings into date instances
+  convertDates(data, ['startsAt', 'endsAt']);
+
+  return data;
+}
+
+/**
+ * Fetch the player's records from the API.
+ */
+async function fetchPlayerRecords(username: string, metric: string): Promise<PlayerRecord[]> {
+  const URL = `/players/username/${username}/records`;
+  const { data } = await api.get(URL, { params: { metric } });
+
+  // Convert date strings into date instances
+  convertDates(data, ['updatedAt']);
+
+  return data;
+}
+
+/**
+ * Fetch the player's achievements from the API.
+ */
+async function fetchPlayerAchievements(username: string, limit = 5): Promise<PlayerAchievement[]> {
+  const URL = `/players/username/${username}/achievements`;
+  const { data } = await api.get(URL);
+
+  if (!data) {
+    return [];
+  }
+
+  const achievements: PlayerAchievement[] = data;
+
+  // Convert date strings into date instances
+  convertDates(achievements, ['createdAt']);
+
+  return achievements.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()).slice(0, limit);
+}
+
+export {
+  fetchPlayer,
+  updatePlayer,
+  updateCountry,
+  fetchPlayerGains,
+  fetchPlayerRecords,
+  fetchPlayerAchievements
+};
+
+
+-----
+Here are the current contents of src/commands/instances/index.ts:
+import { Command } from '../../types';
+import ConfigChannelPreference from './config/ConfigChannelPreference';
+import ConfigDefaultChannel from './config/ConfigDefaultChannel';
+import ConfigGroup from './config/ConfigGroup';
+import ConfigPrefix from './config/ConfigPrefix';
+import HelpCommand from './general/Help';
+import GroupCompetitionCommand from './group/GroupCompetition';
+import GroupCompetitionsCommand from './group/GroupCompetitions';
+import GroupDetailsCommand from './group/GroupDetails';
+import GroupGainedCommand from './group/GroupGained';
+import GroupHiscoresCommand from './group/GroupHiscores';
+import GroupMembersCommand from './group/GroupMembers';
+import GroupRecordsCommand from './group/GroupRecords';
+import ApproveNameChange from './moderation/ApproveNameChange';
+import DenyNameChange from './moderation/DenyNameChange';
+import ResetCompetitionCode from './moderation/ResetCompetitionCode';
+import ResetGroupCode from './moderation/ResetGroupCode';
+import ReviewNameChange from './moderation/ReviewNameChange';
+import VerifyGroup from './moderation/VerifyGroup';
+import PlayerAchievements from './player/PlayerAchievements';
+import PlayerActivitiesCommand from './player/PlayerActivities';
+import PlayerBossesCommand from './player/PlayerBosses';
+import PlayerEfficiencyCommand from './player/PlayerEfficiency';
+import PlayerGainedCommand from './player/PlayerGained';
+import PlayerSetFlag from './player/PlayerSetFlag';
+import PlayerSetUsername from './player/PlayerSetUsername';
+import PlayerStatsCommand from './player/PlayerStats';
+import PlayerUpdateCommand from './player/UpdatePlayer';
+
+const commands: Command[] = [
+  // general commands
+  HelpCommand,
+
+  // moderation commands
+  ResetGroupCode,
+  ResetCompetitionCode,
+  VerifyGroup,
+  ReviewNameChange,
+  ApproveNameChange,
+  DenyNameChange,
+
+  // player commands
+  PlayerStatsCommand,
+  PlayerBossesCommand,
+  PlayerActivitiesCommand,
+  PlayerAchievements,
+  PlayerUpdateCommand,
+  PlayerGainedCommand,
+  PlayerEfficiencyCommand,
+  PlayerSetUsername,
+  PlayerSetFlag,
+
+  // group commands
+  GroupDetailsCommand,
+  GroupMembersCommand,
+  GroupHiscoresCommand,
+  GroupRecordsCommand,
+  GroupGainedCommand,
+  GroupCompetitionCommand,
+  GroupCompetitionsCommand,
+
+  // config commands
+  ConfigPrefix,
+  ConfigDefaultChannel,
+  ConfigChannelPreference,
+  ConfigGroup
+];
+
+export default commands;
+
+
+-----
+Now implement the changes required for the Pull Request "Add delete player moderation command".  Make as few changes as possible.  Do not change any filenames unless absolutely necessary.  Respond in git diff format:
+diff --git a/src/api/modules/players.ts b/src/api/modules/players.ts
+--- a/src/api/modules/players.ts
++++ b/src/api/modules/players.ts
+@@ -30,6 +30,18 @@ async function updatePlayer(username: string): Promise<Player> {
+   return data;
+ }
+ 
++/**
++ * Send an API request attempting to delete a player (and all its data)
++ */
++async function deletePlayer(username: string): Promise<{ message: string }> {
++  const URL = `/players/username/${username}`;
++  const adminPassword = process.env.ADMIN_PASSWORD;
++
++  const { data } = await api.delete(URL, { data: { adminPassword } });
++
++  return data;
++}
++
+ /**
+  * Send an API request attempting to update a player's country
+  */
+@@ -93,5 +105,6 @@ export {
+   updateCountry,
+   fetchPlayerGains,
+   fetchPlayerRecords,
+-  fetchPlayerAchievements
++  fetchPlayerAchievements,
++  deletePlayer
+ };
+diff --git a/src/commands/instances/index.ts b/src/commands/instances/index.ts
+--- a/src/commands/instances/index.ts
++++ b/src/commands/instances/index.ts
+@@ -17,6 +17,7 @@ import ResetCompetitionCode from './moderation/ResetCompetitionCode';
+ import ResetGroupCode from './moderation/ResetGroupCode';
+ import ReviewNameChange from './moderation/ReviewNameChange';
+ import VerifyGroup from './moderation/VerifyGroup';
++import DeletePlayer from './moderation/DeletePlayer';
+ import PlayerAchievements from './player/PlayerAchievements';
+ import PlayerActivitiesCommand from './player/PlayerActivities';
+ import PlayerBossesCommand from './player/PlayerBosses';
+@@ -38,6 +39,7 @@ const commands: Command[] = [
+   ReviewNameChange,
+   ApproveNameChange,
+   DenyNameChange,
++  DeletePlayer,
+ 
+   // player commands
+   PlayerStatsCommand,
+diff --git a/src/commands/instances/moderation/DeletePlayer.ts b/src/commands/instances/moderation/DeletePlayer.ts
+new file mode 100644
+--- /dev/null
++++ b/src/commands/instances/moderation/DeletePlayer.ts
+@@ -0,0 +1,48 @@
++import { MessageEmbed } from 'discord.js';
++import { deletePlayer } from '../../../api/modules/players';
++import config from '../../../config';
++import { Command, ParsedMessage } from '../../../types';
++import { getEmoji, hasModeratorRole } from '../../../utils';
++import CommandError from '../../CommandError';
++
++class DeletePlayer implements Command {
++  name: string;
++  template: string;
++
++  constructor() {
++    this.name = 'Delete a player and all its data.';
++    this.template = '!delete-player {username}';
++  }
++
++  activated(message: ParsedMessage) {
++    return (
++      message.command === 'delete-player' &&
++      message.args.length >= 1 &&
++      message.sourceMessage?.guild?.id === config.discord.guildId
++    );
++  }
++
++  async execute(message: ParsedMessage) {
++    if (!hasModeratorRole(message.sourceMessage.member)) {
++      message.respond('Nice try. This command is reserved for Moderators and Admins.');
++      return;
++    }
++
++    const username = message.args.join(' ');
++
++    try {
++      await deletePlayer(username);
++
++      // Respond on the WOM discord chat with a success status
++      const response = new MessageEmbed()
++        .setColor(config.visuals.green)
++        .setDescription(`${getEmoji('success')} \`${username}\` has been successfully deleted!`);
++
++      message.respond(response);
++    } catch (error) {
++      throw new CommandError('Failed to delete player.');
++    }
++  }
++}
++
++export default new DeletePlayer();
+

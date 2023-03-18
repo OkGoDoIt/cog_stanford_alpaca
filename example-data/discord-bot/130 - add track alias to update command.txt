@@ -1,0 +1,236 @@
+https://api.github.com/repos/wise-old-man/discord-bot
+discord-bot
+A discord bot for the Wise Old Man project.
+
+Here is a list of all files in the git repo:
+.dockerignore
+.eslintignore
+.eslintrc
+.gitattributes
+.github/workflows/deploy.yml
+.prettierrc
+.sequelizerc
+Dockerfile
+LICENSE
+README.md
+docker-compose.yml
+package.json
+src/api/handler.ts
+src/api/index.ts
+src/api/modules/competitions.ts
+src/api/modules/groups.ts
+src/api/modules/names.ts
+src/api/modules/players.ts
+src/api/modules/snapshots.ts
+src/api/types.ts
+src/api/utils.ts
+src/bot.ts
+src/commands/CommandError.ts
+src/commands/CustomCommands.ts
+src/commands/instances/config/ConfigChannelPreference.ts
+src/commands/instances/config/ConfigDefaultChannel.ts
+src/commands/instances/config/ConfigGroup.ts
+src/commands/instances/config/ConfigPrefix.ts
+src/commands/instances/general/Help.ts
+src/commands/instances/group/GroupCompetition.ts
+src/commands/instances/group/GroupCompetitions.ts
+src/commands/instances/group/GroupDetails.ts
+src/commands/instances/group/GroupGained.ts
+src/commands/instances/group/GroupHiscores.ts
+src/commands/instances/group/GroupMembers.ts
+src/commands/instances/group/GroupRecords.ts
+src/commands/instances/index.ts
+src/commands/instances/moderation/ApproveNameChange.ts
+src/commands/instances/moderation/DeletePlayer.ts
+src/commands/instances/moderation/DenyNameChange.ts
+src/commands/instances/moderation/ResetCompetitionCode.ts
+src/commands/instances/moderation/ResetGroupCode.ts
+src/commands/instances/moderation/ReviewNameChange.ts
+src/commands/instances/moderation/VerifyGroup.ts
+src/commands/instances/player/PlayerAchievements.ts
+src/commands/instances/player/PlayerActivities.ts
+src/commands/instances/player/PlayerBosses.ts
+src/commands/instances/player/PlayerEfficiency.ts
+src/commands/instances/player/PlayerGained.ts
+src/commands/instances/player/PlayerSetFlag.ts
+src/commands/instances/player/PlayerSetUsername.ts
+src/commands/instances/player/PlayerStats.ts
+src/commands/instances/player/UpdatePlayer.ts
+src/commands/parser.ts
+src/commands/router.ts
+src/config.ts
+src/database/config.ts
+src/database/index.ts
+src/database/migrations/20200616003302-create-guild-configs-table.ts
+src/database/migrations/20200709182151-add-player-alias.ts
+src/database/migrations/20210306142806-create-channel-preferences-table.ts
+src/database/models/Alias.ts
+src/database/models/ChannelPreference.ts
+src/database/models/Server.ts
+src/database/services/alias.ts
+src/database/services/channelPreferences.ts
+src/database/services/server.ts
+src/events/instances/CompetitionCreated.ts
+src/events/instances/CompetitionEnded.ts
+src/events/instances/CompetitionEnding.ts
+src/events/instances/CompetitionStarted.ts
+src/events/instances/CompetitionStarting.ts
+src/events/instances/MemberAchievements.ts
+src/events/instances/MemberHardcoreDied.ts
+src/events/instances/MemberNameChanged.ts
+src/events/instances/MembersJoined.ts
+src/events/instances/MembersLeft.ts
+src/events/instances/index.ts
+src/events/router.ts
+src/index.ts
+src/types.ts
+src/utils/broadcast.ts
+src/utils/dates.ts
+src/utils/discord.ts
+src/utils/flags.ts
+src/utils/index.ts
+src/utils/levels.ts
+src/utils/metrics.ts
+src/utils/rendering.ts
+src/utils/strings.ts
+tsconfig.json
+wait-for-it.sh
+
+-----
+Here is the project's README.md:
+<div align = "center">
+
+![Wise Old Man Discord Bot](https://user-images.githubusercontent.com/3278148/86964409-ec5f2880-c15d-11ea-84bf-8b484d60afd2.png)
+
+🔗 [www.bot.wiseoldman.net](https://bot.wiseoldman.net/)
+
+Track your Old School Runescape clan’s progress from your own Discord server.
+
+![MIT license](https://img.shields.io/github/license/wise-old-man/wise-old-man) ![Bot repo](https://img.shields.io/badge/wise%20old%20man-discord%20bot-blue)
+
+The Wise Old Man is an app that tracks your Old School Runescape player progress. Built on top of the OSRS hiscores, it allows you to keep track of your gains, participate in group competitions, collect achievements and much more.
+
+This repository is an extention of the core project, a Discord Bot to server as a secondary user interface.
+
+[Website](https://bot.wiseoldman.net/) |
+[Discord](https://discord.gg/Ky5vNt2) |
+[Patreon](https://www.patreon.com/wiseoldman)
+
+</div>
+
+<br />
+
+## 👪 Related projects
+
+- [Core Repository (API/Webapp)](https://github.com/wise-old-man/wise-old-man)
+- [Discord Bot Landing Page](https://github.com/wise-old-man/bot.wiseoldman.net)
+
+<br />
+
+## 📚 Technologies
+
+This project is built using Discord.js, Sequelize and Express.
+
+<br />
+
+## 💬 Suggestions and bugs
+
+Have a suggestion or a bug to report? [Click here to create a issue](https://github.com/wise-old-man/discord-bot/issues)
+
+Have something else you'd like to discuss? [Join us on discord](https://discord.gg/Ky5vNt2)
+
+<br />
+
+
+-----
+Now we want to add a pull request "add track alias to update command".  Here is the description of what this PR does:
+resolves #125 
+
+-----
+What files need to be modified or added to implement this change?
+modified src/commands/instances/player/UpdatePlayer.ts
+
+-----
+Here are the current contents of src/commands/instances/player/UpdatePlayer.ts:
+import { MessageEmbed } from 'discord.js';
+import { updatePlayer } from '../../../api/modules/players';
+import config from '../../../config';
+import { getUsername } from '../../../database/services/alias';
+import { Command, ParsedMessage } from '../../../types';
+import CommandError from '../../CommandError';
+
+class UpdatePlayer implements Command {
+  name: string;
+  template: string;
+
+  constructor() {
+    this.name = 'Update player';
+    this.template = '!update {username}';
+  }
+
+  activated(message: ParsedMessage) {
+    return message.command === 'update';
+  }
+
+  async execute(message: ParsedMessage) {
+    // Grab the username from the command's arguments or database alias
+    const username = await this.getUsername(message);
+
+    if (!username) {
+      throw new CommandError(
+        'This commands requires a username. Set a default by using the `setrsn` command.'
+      );
+    }
+
+    try {
+      const result = await updatePlayer(username);
+
+      const response = new MessageEmbed()
+        .setColor(config.visuals.green)
+        .setDescription(`Successfully updated **${result.displayName}**.`)
+        .setFooter('Tip: You can keep yourself automatically updated through Runelite by enabling Wise Old Man in the "XP Updater" plugin.');
+
+      message.respond(response);
+    } catch (e) {
+      if (e.response?.status === 500) {
+        throw new CommandError('Failed to update: OSRS Hiscores are unavailable.'); 
+      } else {
+        throw new CommandError(e.response?.data?.message || `Failed to update **${username}**.`);
+      }
+    }
+  }
+
+  async getUsername(message: ParsedMessage): Promise<string | undefined | null> {
+    if (message.args && message.args.length > 0) {
+      return message.args.join(' ');
+    }
+
+    const inferedUsername = await getUsername(message.sourceMessage.author.id);
+
+    return inferedUsername;
+  }
+}
+
+export default new UpdatePlayer();
+
+
+-----
+Now implement the changes required for the Pull Request "add track alias to update command".  Make as few changes as possible.  Do not change any filenames unless absolutely necessary.  Respond in git diff format:
+diff --git a/src/commands/instances/player/UpdatePlayer.ts b/src/commands/instances/player/UpdatePlayer.ts
+--- a/src/commands/instances/player/UpdatePlayer.ts
++++ b/src/commands/instances/player/UpdatePlayer.ts
+@@ -11,11 +11,11 @@ class UpdatePlayer implements Command {
+ 
+   constructor() {
+     this.name = 'Update player';
+-    this.template = '!update {username}';
++    this.template = '![update/track] {username}';
+   }
+ 
+   activated(message: ParsedMessage) {
+-    return message.command === 'update';
++    return message.command === 'update' || message.command === 'track';
+   }
+ 
+   async execute(message: ParsedMessage) {
+

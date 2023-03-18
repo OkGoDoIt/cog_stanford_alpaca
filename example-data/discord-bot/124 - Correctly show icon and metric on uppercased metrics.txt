@@ -1,0 +1,669 @@
+https://api.github.com/repos/wise-old-man/discord-bot
+discord-bot
+A discord bot for the Wise Old Man project.
+
+Here is a list of all files in the git repo:
+.dockerignore
+.eslintignore
+.eslintrc
+.gitattributes
+.github/workflows/deploy.yml
+.prettierrc
+.sequelizerc
+Dockerfile
+LICENSE
+README.md
+docker-compose.yml
+package.json
+src/api/handler.ts
+src/api/index.ts
+src/api/modules/competitions.ts
+src/api/modules/groups.ts
+src/api/modules/names.ts
+src/api/modules/players.ts
+src/api/modules/snapshots.ts
+src/api/types.ts
+src/api/utils.ts
+src/bot.ts
+src/commands/CommandError.ts
+src/commands/CustomCommands.ts
+src/commands/instances/config/ConfigChannelPreference.ts
+src/commands/instances/config/ConfigDefaultChannel.ts
+src/commands/instances/config/ConfigGroup.ts
+src/commands/instances/config/ConfigPrefix.ts
+src/commands/instances/general/Help.ts
+src/commands/instances/group/GroupCompetition.ts
+src/commands/instances/group/GroupCompetitions.ts
+src/commands/instances/group/GroupDetails.ts
+src/commands/instances/group/GroupGained.ts
+src/commands/instances/group/GroupHiscores.ts
+src/commands/instances/group/GroupMembers.ts
+src/commands/instances/group/GroupRecords.ts
+src/commands/instances/index.ts
+src/commands/instances/moderation/ApproveNameChange.ts
+src/commands/instances/moderation/DenyNameChange.ts
+src/commands/instances/moderation/ResetCompetitionCode.ts
+src/commands/instances/moderation/ResetGroupCode.ts
+src/commands/instances/moderation/ReviewNameChange.ts
+src/commands/instances/moderation/VerifyGroup.ts
+src/commands/instances/player/PlayerAchievements.ts
+src/commands/instances/player/PlayerActivities.ts
+src/commands/instances/player/PlayerBosses.ts
+src/commands/instances/player/PlayerEfficiency.ts
+src/commands/instances/player/PlayerGained.ts
+src/commands/instances/player/PlayerSetFlag.ts
+src/commands/instances/player/PlayerSetUsername.ts
+src/commands/instances/player/PlayerStats.ts
+src/commands/instances/player/UpdatePlayer.ts
+src/commands/parser.ts
+src/commands/router.ts
+src/config.ts
+src/database/config.ts
+src/database/index.ts
+src/database/migrations/20200616003302-create-guild-configs-table.ts
+src/database/migrations/20200709182151-add-player-alias.ts
+src/database/migrations/20210306142806-create-channel-preferences-table.ts
+src/database/models/Alias.ts
+src/database/models/ChannelPreference.ts
+src/database/models/Server.ts
+src/database/services/alias.ts
+src/database/services/channelPreferences.ts
+src/database/services/server.ts
+src/events/instances/CompetitionCreated.ts
+src/events/instances/CompetitionEnded.ts
+src/events/instances/CompetitionEnding.ts
+src/events/instances/CompetitionStarted.ts
+src/events/instances/CompetitionStarting.ts
+src/events/instances/MemberAchievements.ts
+src/events/instances/MemberHardcoreDied.ts
+src/events/instances/MemberNameChanged.ts
+src/events/instances/MembersJoined.ts
+src/events/instances/MembersLeft.ts
+src/events/instances/index.ts
+src/events/router.ts
+src/index.ts
+src/types.ts
+src/utils/broadcast.ts
+src/utils/dates.ts
+src/utils/discord.ts
+src/utils/flags.ts
+src/utils/index.ts
+src/utils/levels.ts
+src/utils/metrics.ts
+src/utils/rendering.ts
+src/utils/strings.ts
+tsconfig.json
+wait-for-it.sh
+
+-----
+Here is the project's README.md:
+<div align = "center">
+
+![Wise Old Man Discord Bot](https://user-images.githubusercontent.com/3278148/86964409-ec5f2880-c15d-11ea-84bf-8b484d60afd2.png)
+
+🔗 [www.bot.wiseoldman.net](https://bot.wiseoldman.net/)
+
+Track your Old School Runescape clan’s progress from your own Discord server.
+
+![MIT license](https://img.shields.io/github/license/wise-old-man/wise-old-man) ![Bot repo](https://img.shields.io/badge/wise%20old%20man-discord%20bot-blue)
+
+The Wise Old Man is an app that tracks your Old School Runescape player progress. Built on top of the OSRS hiscores, it allows you to keep track of your gains, participate in group competitions, collect achievements and much more.
+
+This repository is an extention of the core project, a Discord Bot to server as a secondary user interface.
+
+[Website](https://bot.wiseoldman.net/) |
+[Discord](https://discord.gg/Ky5vNt2) |
+[Patreon](https://www.patreon.com/wiseoldman)
+
+</div>
+
+<br />
+
+## 👪 Related projects
+
+- [Core Repository (API/Webapp)](https://github.com/wise-old-man/wise-old-man)
+- [Discord Bot Landing Page](https://github.com/wise-old-man/bot.wiseoldman.net)
+
+<br />
+
+## 📚 Technologies
+
+This project is built using Discord.js, Sequelize and Express.
+
+<br />
+
+## 💬 Suggestions and bugs
+
+Have a suggestion or a bug to report? [Click here to create a issue](https://github.com/wise-old-man/discord-bot/issues)
+
+Have something else you'd like to discuss? [Join us on discord](https://discord.gg/Ky5vNt2)
+
+<br />
+
+
+-----
+Now we want to add a pull request "Correctly show icon and metric on uppercased metrics".  Here is the description of what this PR does:
+Fixes #109 properly hopefully. Was still returning the non-lowercased metric at the end.
+
+-----
+What files need to be modified or added to implement this change?
+modified src/utils/metrics.ts
+
+-----
+Here are the current contents of src/utils/metrics.ts:
+import { MetricType } from '../api/types';
+
+const SKILLS_MAP = [
+  { key: 'attack', name: 'Attack' },
+  { key: 'strength', name: 'Strength' },
+  { key: 'defence', name: 'Defence' },
+  { key: 'ranged', name: 'Ranged' },
+  { key: 'prayer', name: 'Prayer' },
+  { key: 'magic', name: 'Magic' },
+  { key: 'runecrafting', name: 'Runecrafting' },
+  { key: 'construction', name: 'Construction' },
+  { key: 'hitpoints', name: 'Hitpoints' },
+  { key: 'agility', name: 'Agility' },
+  { key: 'herblore', name: 'Herblore' },
+  { key: 'thieving', name: 'Thieving' },
+  { key: 'crafting', name: 'Crafting' },
+  { key: 'fletching', name: 'Fletching' },
+  { key: 'slayer', name: 'Slayer' },
+  { key: 'hunter', name: 'Hunter' },
+  { key: 'mining', name: 'Mining' },
+  { key: 'smithing', name: 'Smithing' },
+  { key: 'fishing', name: 'Fishing' },
+  { key: 'cooking', name: 'Cooking' },
+  { key: 'firemaking', name: 'Firemaking' },
+  { key: 'woodcutting', name: 'Woodcutting' },
+  { key: 'farming', name: 'Farming' },
+  { key: 'overall', name: 'Overall' }
+];
+
+const ACTIVITIES_MAP = [
+  { key: 'league_points', name: 'League Points' },
+  { key: 'last_man_standing', name: 'Last Man Standing' },
+  { key: 'bounty_hunter_hunter', name: 'Bounty Hunter (Hunter)' },
+  { key: 'bounty_hunter_rogue', name: 'Bounty Hunter (Rogue)' },
+  { key: 'clue_scrolls_beginner', name: 'Clue Scrolls (Beginner)' },
+  { key: 'clue_scrolls_easy', name: 'Clue Scrolls (Easy)' },
+  { key: 'clue_scrolls_medium', name: 'Clue Scrolls (Medium)' },
+  { key: 'clue_scrolls_hard', name: 'Clue Scrolls (Hard)' },
+  { key: 'clue_scrolls_elite', name: 'Clue Scrolls (Elite)' },
+  { key: 'clue_scrolls_master', name: 'Clue Scrolls (Master)' },
+  { key: 'clue_scrolls_all', name: 'Clue Scrolls (All)' },
+  { key: 'soul_wars_zeal', name: 'Soul Wars Zeal' }
+];
+
+const BOSSES_MAP = [
+  { key: 'abyssal_sire', name: 'Abyssal Sire' },
+  { key: 'alchemical_hydra', name: 'Alchemical Hydra' },
+  { key: 'barrows_chests', name: 'Barrows Chests' },
+  { key: 'bryophyta', name: 'Bryophyta' },
+  { key: 'callisto', name: 'Callisto' },
+  { key: 'cerberus', name: 'Cerberus' },
+  { key: 'chambers_of_xeric', name: 'Chambers Of Xeric' },
+  { key: 'chambers_of_xeric_challenge_mode', name: 'Chambers Of Xeric (CM)' },
+  { key: 'chaos_elemental', name: 'Chaos Elemental' },
+  { key: 'chaos_fanatic', name: 'Chaos Fanatic' },
+  { key: 'commander_zilyana', name: 'Commander Zilyana' },
+  { key: 'corporeal_beast', name: 'Corporeal Beast' },
+  { key: 'crazy_archaeologist', name: 'Crazy Archaeologist' },
+  { key: 'dagannoth_prime', name: 'Dagannoth Prime' },
+  { key: 'dagannoth_rex', name: 'Dagannoth Rex' },
+  { key: 'dagannoth_supreme', name: 'Dagannoth Supreme' },
+  { key: 'deranged_archaeologist', name: 'Deranged Archaeologist' },
+  { key: 'general_graardor', name: 'General Graardor' },
+  { key: 'giant_mole', name: 'Giant Mole' },
+  { key: 'grotesque_guardians', name: 'Grotesque Guardians' },
+  { key: 'hespori', name: 'Hespori' },
+  { key: 'kalphite_queen', name: 'Kalphite Queen' },
+  { key: 'king_black_dragon', name: 'King Black Dragon' },
+  { key: 'kraken', name: 'Kraken' },
+  { key: 'kreearra', name: "Kree'Arra" },
+  { key: 'kril_tsutsaroth', name: "K'ril Tsutsaroth" },
+  { key: 'mimic', name: 'Mimic' },
+  { key: 'nightmare', name: 'Nightmare' },
+  { key: 'phosanis_nightmare', name: "Phosani's Nightmare" },
+  { key: 'obor', name: 'Obor' },
+  { key: 'sarachnis', name: 'Sarachnis' },
+  { key: 'scorpia', name: 'Scorpia' },
+  { key: 'skotizo', name: 'Skotizo' },
+  { key: 'tempoross', name: 'Tempoross' },
+  { key: 'the_gauntlet', name: 'The Gauntlet' },
+  { key: 'the_corrupted_gauntlet', name: 'The Corrupted Gauntlet' },
+  { key: 'theatre_of_blood', name: 'Theatre Of Blood' },
+  { key: 'theatre_of_blood_hard_mode', name: 'Theatre Of Blood (HM)' },
+  { key: 'thermonuclear_smoke_devil', name: 'Therm. Smoke Devil' },
+  { key: 'tzkal_zuk', name: 'TzKal-Zuk' },
+  { key: 'tztok_jad', name: 'TzTok-Jad' },
+  { key: 'venenatis', name: 'Venenatis' },
+  { key: 'vetion', name: "Vet'ion" },
+  { key: 'vorkath', name: 'Vorkath' },
+  { key: 'wintertodt', name: 'Wintertodt' },
+  { key: 'zalcano', name: 'Zalcano' },
+  { key: 'zulrah', name: 'Zulrah' }
+];
+
+const VIRTUALS_MAP = [
+  { key: 'ehp', name: 'EHP' },
+  { key: 'ehb', name: 'EHB' }
+];
+
+export const SKILLS = SKILLS_MAP.map(s => s.key);
+export const ACTIVITIES = ACTIVITIES_MAP.map(s => s.key);
+export const BOSSES = BOSSES_MAP.map(s => s.key);
+export const VIRTUALS = VIRTUALS_MAP.map(s => s.key);
+export const ALL_METRICS = [...SKILLS, ...ACTIVITIES, ...BOSSES, ...VIRTUALS];
+
+export function isSkill(metric: string): boolean {
+  return SKILLS.includes(metric);
+}
+
+export function isActivity(metric: string): boolean {
+  return ACTIVITIES.includes(metric);
+}
+
+export function isBoss(metric: string): boolean {
+  return BOSSES.includes(metric);
+}
+
+export function isVirtual(metric: string): boolean {
+  return VIRTUALS.includes(metric);
+}
+
+export function getType(metric: string): MetricType | null {
+  if (isSkill(metric)) {
+    return MetricType.Skill;
+  }
+
+  if (isActivity(metric)) {
+    return MetricType.Activity;
+  }
+
+  if (isBoss(metric)) {
+    return MetricType.Boss;
+  }
+
+  if (isVirtual(metric)) {
+    return MetricType.Virtual;
+  }
+
+  return null;
+}
+
+export function getMeasure(metric: string): string {
+  if (isSkill(metric)) {
+    return 'experience';
+  }
+
+  if (isActivity(metric)) {
+    return 'score';
+  }
+
+  if (isBoss(metric)) {
+    return 'kills';
+  }
+
+  return 'value';
+}
+
+export function getMetricName(metric: string): string {
+  if (metric === 'combat') {
+    return 'Combat';
+  }
+
+  const allMetricConfigs = [...SKILLS_MAP, ...ACTIVITIES_MAP, ...BOSSES_MAP, ...VIRTUALS_MAP];
+
+  for (let i = 0; i < allMetricConfigs.length; i += 1) {
+    if (allMetricConfigs[i].key === metric) {
+      return allMetricConfigs[i].name;
+    }
+  }
+
+  return 'Invalid metric name';
+}
+
+export function getAbbreviation(abbr: string): string {
+  const abbreviation = abbr.toLowerCase();
+
+  switch (abbreviation) {
+   // Bosses
+    case 'sire':
+      return 'abyssal_sire';
+
+    case 'hydra':
+      return 'alchemical_hydra';
+
+    case 'barrows':
+      return 'barrows_chests';
+
+    case 'bryo':
+      return 'bryophyta';
+
+    case 'cerb':
+      return 'cerberus';
+
+    case 'cox':
+    case 'xeric':
+    case 'chambers':
+    case 'olm':
+    case 'raids':
+      return 'chambers_of_xeric';
+
+    case 'cox-cm':
+    case 'xeric-cm':
+    case 'chambers-cm':
+    case 'olm-cm':
+    case 'raids-cm':
+      return 'chambers_of_xeric_challenge_mode';
+
+    case 'chaos-ele':
+      return 'chaos_elemental';
+
+    case 'fanatic':
+      return 'chaos_fanatic';
+
+    case 'sara':
+    case 'saradomin':
+    case 'zilyana':
+    case 'zily':
+      return 'commander_zilyana';
+
+    case 'corp':
+      return 'corporeal_beast';
+
+    case 'crazy-arch':
+      return 'crazy_archaeologist';
+
+    case 'prime':
+      return 'dagannoth_prime';
+    case 'rex':
+      return 'dagannoth_rex';
+    case 'supreme':
+      return 'dagannoth_supreme';
+
+    case 'deranged-arch':
+      return 'deranged_archaeologist';
+
+    case 'bandos':
+    case 'graardor':
+      return 'general_graardor';
+
+    case 'mole':
+      return 'giant_mole';
+
+    case 'dusk':
+    case 'dawn':
+    case 'gargs':
+    case 'guardians':
+    case 'ggs':
+      return 'grotesque_guardians';
+
+    case 'kq':
+      return 'kalphite_queen';
+
+    case 'kbd':
+      return 'king_black_dragon';
+
+    case 'kree':
+    case 'kreearra':
+    case 'armadyl':
+    case 'arma':
+      return 'kreearra';
+
+    case 'zammy':
+    case 'zamorak':
+    case 'kril':
+    case 'kril-tsutsaroth':
+      return 'kril_tsutsaroth';
+
+    case 'gaunt':
+    case 'gauntlet':
+    case 'the-gauntlet':
+      return 'the_gauntlet';
+
+    case 'cgaunt':
+    case 'cgauntlet':
+    case 'corrupted':
+    case 'corrupted-gauntlet':
+    case 'the-corrupted-gauntlet':
+      return 'the_corrupted_gauntlet';
+
+    case 'tob':
+    case 'theatre':
+    case 'verzik':
+    case 'tob-normal':
+      return 'theatre_of_blood';
+      
+    case 'tob-hm':
+    case 'tob-cm':
+    case 'tob-hard-mode':
+    case 'tob-hard':
+      return 'theatre_of_blood_hard_mode';
+      
+    case 'nm':
+    case 'tnm':
+    case 'nmare':
+    case 'the-nightmare':
+      return 'nightmare';
+      
+    case 'pnm':
+    case 'phosani':
+    case 'phosanis':
+    case 'phosani-nm':
+    case 'phosani-nightmare':
+    case 'phosanis nightmare':
+      return 'phosanis_nightmare';
+
+    case 'thermy':
+    case 'smoke-devil':
+      return 'thermonuclear_smoke_devil';
+
+    case 'zuk':
+    case 'inferno':
+      return 'tzkal_zuk';
+
+    case 'jad':
+    case 'fight-caves':
+    case 'fc':
+      return 'tztok_jad';
+
+    case 'vork':
+    case 'vorky':
+      return 'vorkath';
+
+    case 'wt':
+      return 'wintertodt';
+
+    case 'snek':
+    case 'zul':
+      return 'zulrah';
+
+    // Minigames and others
+
+    case 'all-clues':
+    case 'clues':
+      return 'clue_scrolls_all';
+
+    case 'beginner':
+    case 'beginner-clues':
+    case 'beg-clues':
+    case 'beginners':
+      return 'clue_scrolls_beginner';
+
+    case 'easy':
+    case 'easy-clues':
+    case 'easies':
+      return 'clue_scrolls_easy';
+
+    case 'medium':
+    case 'med':
+    case 'meds':
+    case 'medium-clues':
+    case 'med-clues':
+    case 'mediums':
+      return 'clue_scrolls_medium';
+
+    case 'hard':
+    case 'hard-clues':
+    case 'hards':
+      return 'clue_scrolls_hard';
+
+    case 'elite':
+    case 'elite-clues':
+    case 'elites':
+      return 'clue_scrolls_elite';
+
+    case 'master':
+    case 'master-clues':
+    case 'masters':
+      return 'clue_scrolls_master';
+
+    case 'lms':
+      return 'last_man_standing';
+
+    case 'league':
+    case 'lp':
+    case 'lps':
+      return 'league_points';
+
+    case 'sw':
+    case 'zeal':
+    case 'soul-wars':
+      return 'soul_wars_zeal';
+
+    // Skills
+
+    case 'runecraft':
+    case 'rc':
+      return 'runecrafting';
+
+    case 'att':
+    case 'atk':
+    case 'attk':
+      return 'attack';
+
+    case 'def':
+    case 'defense':
+      return 'defence';
+
+    case 'str':
+      return 'strength';
+
+    case 'hp':
+      return 'hitpoints';
+
+    case 'range':
+      return 'ranged';
+
+    case 'pray':
+      return 'prayer';
+
+    case 'mage':
+      return 'magic';
+
+    case 'cook':
+      return 'cooking';
+
+    case 'wc':
+      return 'woodcutting';
+
+    case 'fletch':
+      return 'fletching';
+
+    case 'fish':
+      return 'fishing';
+
+    case 'fm':
+    case 'burning':
+      return 'firemaking';
+
+    case 'craft':
+      return 'crafting';
+
+    case 'sm':
+    case 'smith':
+      return 'smithing';
+
+    case 'mine':
+    case 'smash':
+      return 'mining';
+
+    case 'herb':
+      return 'herblore';
+
+    case 'agi':
+    case 'agil':
+      return 'agility';
+
+    case 'thief':
+      return 'thieving';
+
+    case 'slay':
+      return 'slayer';
+
+    case 'farm':
+      return 'farming';
+
+    case 'hunt':
+    case 'hunting':
+      return 'hunter';
+
+    case 'con':
+    case 'cons':
+    case 'const':
+      return 'construction';
+
+    default:
+      return abbr;
+  }
+}
+
+
+-----
+Now implement the changes required for the Pull Request "Correctly show icon and metric on uppercased metrics".  Make as few changes as possible.  Do not change any filenames unless absolutely necessary.  Respond in git diff format:
+diff --git a/src/utils/metrics.ts b/src/utils/metrics.ts
+--- a/src/utils/metrics.ts
++++ b/src/utils/metrics.ts
+@@ -175,7 +175,7 @@ export function getAbbreviation(abbr: string): string {
+   const abbreviation = abbr.toLowerCase();
+ 
+   switch (abbreviation) {
+-   // Bosses
++    // Bosses
+     case 'sire':
+       return 'abyssal_sire';
+ 
+@@ -282,19 +282,19 @@ export function getAbbreviation(abbr: string): string {
+     case 'verzik':
+     case 'tob-normal':
+       return 'theatre_of_blood';
+-      
++
+     case 'tob-hm':
+     case 'tob-cm':
+     case 'tob-hard-mode':
+     case 'tob-hard':
+       return 'theatre_of_blood_hard_mode';
+-      
++
+     case 'nm':
+     case 'tnm':
+     case 'nmare':
+     case 'the-nightmare':
+       return 'nightmare';
+-      
++
+     case 'pnm':
+     case 'phosani':
+     case 'phosanis':
+@@ -463,6 +463,6 @@ export function getAbbreviation(abbr: string): string {
+       return 'construction';
+ 
+     default:
+-      return abbr;
++      return abbreviation;
+   }
+ }
+
